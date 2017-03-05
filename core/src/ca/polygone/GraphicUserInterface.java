@@ -14,7 +14,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class GraphicUserInterface extends ApplicationAdapter implements InputProcessor {
+    Environment Level;
+    HashMap<Cord,Piece> map = new HashMap<Cord,Piece>();
     Texture badlogictexture;
     SpriteBatch floorbatch;
     final Matrix4 floorMatrix = new Matrix4();
@@ -25,8 +30,9 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
 
     Texture purpleFade;
     Sprite[] hourGlass = new Sprite[5];
-    SpriteBatch piecebatch;
     final Matrix4 pieceMatrix = new Matrix4();
+
+    ArrayList<Sprite> pieceSpriteArray = new ArrayList<Sprite>();
 
     OrthographicCamera cam;
     Sprite selectedPiece;
@@ -42,8 +48,13 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
         cam.direction.set(-1, -1, -1);
         cam.zoom = 1;
 
-        mapLenght = 10;
-        mapWidth = 10;
+        mapLenght = 6;
+        mapWidth = 6;
+
+
+        HourGlass pro1 = new HourGlass(new Cord(1,1));
+        map.put(pro1.getCords(),pro1);
+
         floor = new Sprite[mapLenght][mapWidth];
         badlogictexture = new Texture(Gdx.files.internal("core/assets/GroundGrey.png"));
         floorMatrix.setToRotation(new Vector3(1, 0, 0), 90);
@@ -58,42 +69,12 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
 
         floorbatch = new SpriteBatch();
 
-        pieceMatrix.rotate(new Vector3(0,1 , 0), 45);
-
-
-
-        purpleFade = new Texture(Gdx.files.internal("core/assets/NewHourGlass.png"));
-        for (int i =0; i <5; i++){
-            hourGlass[i] = new Sprite(purpleFade);
-            hourGlass[i].setPosition(i,i);
-            hourGlass[i].setSize(1, 1);
-        }
-        selectedPiece = hourGlass[0];
-
-
-
         Gdx.input.setInputProcessor(this);
     }
 
     @Override public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
-        cam.update();
 
-        floorbatch.setProjectionMatrix(cam.combined);
-        floorbatch.setTransformMatrix(floorMatrix);
-        floorbatch.begin();
-        for (int z = 0; z < mapLenght; z++) {
-            for (int x = 0; x < mapWidth; x++) {
-                floor[x][z].draw(floorbatch);
-            }
-        }
-
-        for(int i = 0; i<5 ;i++ ) {
-            hourGlass[i].draw(floorbatch);
-        }
-        floorbatch.end();
-
+        drawMap();
         checkTileTouched();
 
     }
@@ -176,16 +157,43 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
                 sprite.setColor(1, 0, 0, 1);
                 lastSelectedTile = sprite;
 
-                for (Sprite E : hourGlass){
+                /*for (Sprite E : hourGlass){
                     if(E.getX() == x && E.getY() == z){
                         selectedPiece.setColor(1, 1, 1, 1);
                         selectedPiece = E;
                         E.setColor(1, 0, 0, 1);
                     }
-                }
+                }*/
 
             }
         }
     }
+
+    private void drawMap(){
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+        cam.update();
+
+        floorbatch.setProjectionMatrix(cam.combined);
+        floorbatch.setTransformMatrix(floorMatrix);
+        floorbatch.begin();
+
+        for (int z = 0; z < mapLenght; z++) {
+            for (int x = 0; x < mapWidth; x++) {
+                floor[x][z].draw(floorbatch);
+            }
+        }
+
+        for (Cord key : map.keySet()) {
+           Sprite newSprite = new Sprite(new Texture(Gdx.files.internal(map.get(key).getTexture())));
+            newSprite.setPosition(key.getX(),key.getY());
+            newSprite.setSize(1, 1);
+            newSprite.draw(floorbatch);
+            pieceSpriteArray.add(newSprite);
+
+        }
+        floorbatch.end();
+    }
+
 
 }
