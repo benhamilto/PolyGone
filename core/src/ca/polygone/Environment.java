@@ -15,4 +15,5 @@ public class Environment {
         public HashMap<Cord,Piece> getMap(){
             return Map;
         }
+
 }
