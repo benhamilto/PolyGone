@@ -19,16 +19,17 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
     SpriteBatch floorbatch;
     final Matrix4 floorMatrix = new Matrix4();
     Sprite[][] floor;
+
     int mapLenght;
     int mapWidth;
 
     Texture purpleFade;
-    Sprite hourGlass;
+    Sprite[] hourGlass = new Sprite[5];
     SpriteBatch piecebatch;
     final Matrix4 pieceMatrix = new Matrix4();
 
     OrthographicCamera cam;
-
+    Sprite selectedPiece;
 
 
 
@@ -53,17 +54,21 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
                 floor[x][z].setSize(1, 1);
             }
         }
+
+
         floorbatch = new SpriteBatch();
 
+        pieceMatrix.rotate(new Vector3(0,1 , 0), 45);
 
 
-        pieceMatrix.setToRotation(new Vector3(0, 1, 0), 45);
-        pieceMatrix.trn(5,0,5);
-        piecebatch = new SpriteBatch();
-        purpleFade = new Texture(Gdx.files.internal("core/assets/hourglass.jpg"));
-        hourGlass = new Sprite(purpleFade);
-        hourGlass.setPosition(0,0);
-        hourGlass.setSize(1, 1);
+
+        purpleFade = new Texture(Gdx.files.internal("core/assets/NewHourGlass.png"));
+        for (int i =0; i <5; i++){
+            hourGlass[i] = new Sprite(purpleFade);
+            hourGlass[i].setPosition(i,i);
+            hourGlass[i].setSize(1, 1);
+        }
+        selectedPiece = hourGlass[0];
 
 
 
@@ -83,20 +88,20 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
                 floor[x][z].draw(floorbatch);
             }
         }
+
+        for(int i = 0; i<5 ;i++ ) {
+            hourGlass[i].draw(floorbatch);
+        }
         floorbatch.end();
 
-        piecebatch.setProjectionMatrix(cam.combined);
-        piecebatch.setTransformMatrix(pieceMatrix);
-        piecebatch.begin();
-        hourGlass.draw(piecebatch);
-        piecebatch.end();
+        checkTileTouched();
 
     }
 
-
-
     final Plane xzPlane = new Plane(new Vector3(0, 1, 0), 0);
     final Vector3 intersection = new Vector3();
+    Sprite lastSelectedTile = null;
+
     final Vector3 curr = new Vector3();
     final Vector3 last = new Vector3(-1, -1, -1);
     final Vector3 delta = new Vector3();
@@ -114,6 +119,7 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
         last.set(x, y, 0);
         return false;
     }
+
 
     @Override public boolean touchUp(int x, int y, int pointer, int button) {
         last.set(-1, -1, -1);
@@ -156,5 +162,30 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
 
     }
 
+
+
+    private void checkTileTouched() {
+        if(Gdx.input.justTouched()) {
+            Ray pickRay = cam.getPickRay(Gdx.input.getX(), Gdx.input.getY());
+            Intersector.intersectRayPlane(pickRay, xzPlane, intersection);
+            int x = (int)intersection.x;
+            int z = (int)intersection.z;
+            if(x >= 0 && x < mapLenght && z >= 0 && z < mapWidth) {
+                if(lastSelectedTile != null) lastSelectedTile.setColor(1, 1, 1, 1);
+                Sprite sprite = floor[x][z];
+                sprite.setColor(1, 0, 0, 1);
+                lastSelectedTile = sprite;
+
+                for (Sprite E : hourGlass){
+                    if(E.getX() == x && E.getY() == z){
+                        selectedPiece.setColor(1, 1, 1, 1);
+                        selectedPiece = E;
+                        E.setColor(1, 0, 0, 1);
+                    }
+                }
+
+            }
+        }
+    }
 
 }
