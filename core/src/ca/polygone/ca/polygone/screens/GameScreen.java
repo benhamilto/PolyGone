@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.collision.Ray;
 /**
  * Created by Ben on 2017-03-05.
  */
-public class GameScreen implements Screen {
+public class GameScreen extends PolyGoneScreen {
 
 
     GraphicUserInterface game;
@@ -42,6 +42,7 @@ public class GameScreen implements Screen {
 
 
     public GameScreen(GraphicUserInterface game) {
+        super(game);
         this.game = game;
 
 

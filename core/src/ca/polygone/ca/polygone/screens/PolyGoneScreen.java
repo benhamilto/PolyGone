@@ -1,5 +1,6 @@
 package ca.polygone.ca.polygone.screens;
 
+import ca.polygone.GraphicUserInterface;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
@@ -7,9 +8,9 @@ import com.badlogic.gdx.Screen;
  * Created by bhamilto on 3/4/17.
  */
 public abstract class PolyGoneScreen implements Screen{
-    Game game;
+    private GraphicUserInterface game;
 
-    public PolyGoneScreen(Game game) {
+    public PolyGoneScreen(GraphicUserInterface game) {
         this.game = game;
     }
 
