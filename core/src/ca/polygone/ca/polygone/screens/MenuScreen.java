@@ -1,8 +1,12 @@
 package ca.polygone.ca.polygone.screens;
 
+import ca.polygone.GraphicUserInterface;
+import ca.polygone.ca.polygone.*;
+import ca.polygone.MyInputProcessor;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,34 +27,33 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * Created by bhamilto on 3/3/17.
  */
-public class TestScreen extends Game implements Screen{
+public class MenuScreen implements Screen{
+
+    private GraphicUserInterface game;
 
     private Stage stage;
     private BitmapFont font;
     private Skin skin;
     private TextureAtlas atlas;
     private Sprite backgroundSprite;
-    private SpriteBatch batch;
     private Texture texture;
     private Table mainTable;
     
 
 
 
-    public TestScreen() {
+    public MenuScreen(GraphicUserInterface game) {
+        this.game = game;
 
 
-    }
-
-    @Override
-    public void create() {
 
     }
+
+
 
     @Override
     public void show() {
-        batch = new SpriteBatch();
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skin = new Skin(Gdx.files.internal("core/assets/uiskin.json"));
         mainTable = new Table();
         stage = new Stage();
 
@@ -64,12 +67,12 @@ public class TestScreen extends Game implements Screen{
         buttonPlay.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                buttonPlay.setText("Tanis the TURD");
+                game.setScreen(new GameScreen(game));
 
 
             }
         });
-        texture = new Texture(Gdx.files.internal("TitleScreen.jpg"));
+        texture = new Texture(Gdx.files.internal("core/assets/TitleScreen.jpg"));
         backgroundSprite = new Sprite(texture);
 
         mainTable.addActor(buttonPlay);
@@ -86,16 +89,13 @@ public class TestScreen extends Game implements Screen{
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        backgroundSprite.draw(batch);
-        //stage.draw();
-        batch.end();
+        game.batch.begin();
+        backgroundSprite.draw(game.batch);
+        game.batch.end();
         stage.draw();
 
         mainTable.debug();
-//        batch.begin();
-//        backgroundSprite.draw(batch);
-//        batch.end();
+
     }
 
     @Override
@@ -120,6 +120,6 @@ public class TestScreen extends Game implements Screen{
 
     @Override
     public void dispose() {
-        batch.dispose();
+        game.batch.dispose();
     }
 }
