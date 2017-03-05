@@ -157,13 +157,13 @@ public class GraphicUserInterface extends ApplicationAdapter implements InputPro
                 sprite.setColor(1, 0, 0, 1);
                 lastSelectedTile = sprite;
 
-                /*for (Sprite E : hourGlass){
-                    if(E.getX() == x && E.getY() == z){
+                for (Sprite E : pieceSpriteArray){
+                    if( new Cord(E.getX(), E.getY()) ){
                         selectedPiece.setColor(1, 1, 1, 1);
                         selectedPiece = E;
                         E.setColor(1, 0, 0, 1);
                     }
-                }*/
+                }
 
             }
         }
