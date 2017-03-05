@@ -1,5 +1,6 @@
 package ca.polygone.desktop;
 
+import ca.polygone.Environment;
 import ca.polygone.GraphicUserInterface;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -11,7 +12,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.addIcon("desktop/assets/PolyGoneIcon32.png", Files.FileType.Internal);
-
+		Environment currentLevel = new Environment();
 		new LwjglApplication(new GraphicUserInterface(), config);
 	}
 }
