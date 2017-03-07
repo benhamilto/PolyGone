@@ -1,5 +1,7 @@
 package ca.polygone;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  * Created by John on 2017-03-05.
  */
@@ -8,6 +10,7 @@ public abstract class Actor implements Piece {
     protected int moveLimit;
     protected boolean preventsMovement = true;
     protected String texturePath;
+    protected Sprite drawSprite;
 
     public Cord getCords() {
         return cords;
@@ -27,5 +30,13 @@ public abstract class Actor implements Piece {
 
     public String getTexture(){
         return texturePath;
+    }
+
+
+    public Sprite getSprite() {
+        return drawSprite;
+    }
+    public void setSprite(Sprite newSprite){
+        drawSprite = newSprite;
     }
 }

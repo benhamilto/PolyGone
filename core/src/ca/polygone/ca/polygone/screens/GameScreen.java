@@ -27,14 +27,13 @@ public class GameScreen extends PolyGoneScreen {
 
     int mapLenght;
     int mapWidth;
-    int[] moveArrayX = {1,-1,0,0};
-    int[] moveArrayY = {0,0,1,-1};
+    int[] moveArrayX = {1,0,-1,0};
+    int[] moveArrayY = {0,1,0,-1};
     ArrayList<Cord> listOfCords = new ArrayList<>();
     Cord selectCord;
     Cord lastSelectedCord;
 
     OrthographicCamera cam;
-    Sprite selectSprite;
     Piece selectPiece;
     Environment currentLevel;
     Texture badlogictexture;
@@ -48,8 +47,11 @@ public class GameScreen extends PolyGoneScreen {
         super(game);
         this.game = game;
         currentLevel = new Environment();
-        currentLevel.addPieceToBoard(new HourGlass(new Cord(1,1)));
-
+        currentLevel.addPieceToBoard(new HourGlass(new Cord(7,4)));
+        currentLevel.addPieceToBoard(new HourGlass(new Cord(6,4)));
+        for(int i  = 3; i <7;i++){
+            currentLevel.addPieceToBoard(new Wall(new Cord(5,i)));
+        }
         cam = new OrthographicCamera(10,10 * (Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
         cam.near = 1;
         cam.far = 100;
@@ -70,10 +72,9 @@ public class GameScreen extends PolyGoneScreen {
             }
         }
         for (Cord key : currentLevel.getMap().keySet()) {
-            Sprite newSprite = new Sprite(new Texture(Gdx.files.internal(currentLevel.getMap().get(key).getTexture())));
-            newSprite.setPosition(key.getX(), key.getY());
-            newSprite.setSize(1, 1);
-            pieceSpriteArray.add(newSprite);
+            currentLevel.getMap().get(key).setSprite(new Sprite(new Texture(Gdx.files.internal(currentLevel.getMap().get(key).getTexture())))) ;
+            currentLevel.getMap().get(key).getSprite().setPosition(key.getX(), key.getY());
+            currentLevel.getMap().get(key).getSprite().setSize(1, 1);
         }
         floorbatch = new SpriteBatch();
 
@@ -246,36 +247,49 @@ public class GameScreen extends PolyGoneScreen {
                 floor[x][z].draw(floorbatch);
             }
         }
-
-        for (Sprite toSprite : pieceSpriteArray) {
-            toSprite.draw(floorbatch);
+        for (Cord key : currentLevel.getMap().keySet()) {
+            currentLevel.getMap().get(key).getSprite().draw(floorbatch);
         }
+
         floorbatch.end();
     }
     private void highlight(){
 
     }
     private void nextCord(Cord baseCord,int movelimit){
+        System.out.print(baseCord.getX());
+        System.out.print(baseCord.getY());
+        System.out.print(",");
+        System.out.print(movelimit);
+        System.out.print(",");
+        System.out.print('\n');
         movelimit--;
         if(movelimit>0) {
             for(int i = 0; i<4; i++){
                 boolean preventMove = false;
                 Cord newCord = new Cord(baseCord.getX() + moveArrayX[i], baseCord.getY()+ moveArrayY[i]);
                 Piece tempPiece = currentLevel.checkCordForPiece(newCord);
+
                 if (tempPiece != null) {
                     preventMove = tempPiece.preventsMovement();
                 }
-                if (!listOfCords.contains(newCord) && !preventMove && newCord.getX() >= 0 && newCord.getY() >= 0) {
-                    listOfCords.add(newCord);
-                    nextCord( newCord, movelimit);
+                if (!preventMove) {
+                    if( newCord.getX() >= 0 && newCord.getY() >= 0 && newCord.getX() < mapLenght && newCord.getY() < mapWidth){
+                        if(!listOfCords.contains(newCord)) {
+                            listOfCords.add(newCord);
+                        }
+                        nextCord( newCord, movelimit);
+                    }
                 }
             }
         }
     }
     public void confirmMove(){
         if(listOfCords.contains(selectCord)){
+            selectPiece.setCords(selectCord);
             currentLevel.getMap().put(selectCord,selectPiece);
             currentLevel.getMap().remove(selectPiece.getCords());
+            selectPiece.getSprite().setPosition(selectCord.getX(),selectCord.getY());
         }
     }
 
