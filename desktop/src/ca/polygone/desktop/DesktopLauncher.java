@@ -17,7 +17,6 @@ public class DesktopLauncher {
 		config.addIcon("desktop/assets/PolyGoneIcon32.png", Files.FileType.Internal);
 		config.height = 563;
 		config.width = 1000;
-		Environment currentLevel = new Environment();
 		new LwjglApplication(new GraphicUserInterface(), config);
 
 	}

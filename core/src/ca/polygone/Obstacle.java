@@ -7,4 +7,7 @@ public abstract class Obstacle implements Piece {
     protected Cord cords;
     protected boolean preventsMovement = true;
     protected String texturePath;
+    public int getMoveLimit(){
+        return 0;
+    }
 }

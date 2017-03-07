@@ -7,5 +7,6 @@ public interface Piece {
     String getTexture();
     boolean preventsMovement();
     Cord getCords();
+    int getMoveLimit();
 
 }
