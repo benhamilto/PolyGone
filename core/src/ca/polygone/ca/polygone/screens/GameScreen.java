@@ -183,7 +183,7 @@ public class GameScreen extends PolyGoneScreen {
         buttonConfirmMove.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("it works");
+                confirmMove();
             }
         });
 
@@ -246,7 +246,6 @@ public class GameScreen extends PolyGoneScreen {
             Intersector.intersectRayPlane(pickRay, xzPlane, intersection);
             int x = (int) intersection.x;
             int z = (int) intersection.z;
-            selectedCord = new Cord(x, z);
             if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
                 if (lastSelectedTile != null) {
                     if (!listOfCords.contains(lastSelectedCord)) {
@@ -257,14 +256,9 @@ public class GameScreen extends PolyGoneScreen {
 
                 }
                 if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
+                    selectedCord = new Cord(x, z);
                     if (lastSelectedTile != null) lastSelectedTile.setColor(1, 1, 1, 1);
-                    Sprite sprite = floor[x][z];
-                    sprite.setColor(1, 0, 0, 1);
-                    lastSelectedTile = sprite;
-                    lastSelectedCord = selectedCord;
 
-
-                    selectedPiece = currentLevel.getMap().get(selectedCord);
                     if (currentLevel.getMap().containsKey(selectedCord)) {
                         selectedPiece = currentLevel.getMap().get(selectedCord);
                     }
@@ -278,12 +272,16 @@ public class GameScreen extends PolyGoneScreen {
                                 E.setColor(1, 0, 0, 1);
                         }
                         listOfCords.clear();
-                        nextCord(selectedCord, selectedPiece.getMoveLimit());
+                        nextCord(selectedPiece.getCords(), selectedPiece.getMoveLimit());
                         for (Cord drawCord : listOfCords) {
                             floor[drawCord.getX()][drawCord.getY()].setColor(0, 1, 1, 1);
                         }
 
                     }
+                    Sprite sprite = floor[x][z];
+                    sprite.setColor(1, 0, 0, 1);
+                    lastSelectedTile = sprite;
+                    lastSelectedCord = selectedCord;
 
                 }
             }
@@ -313,12 +311,6 @@ public class GameScreen extends PolyGoneScreen {
 
     }
     private void nextCord(Cord baseCord,int movelimit){
-        System.out.print(baseCord.getX());
-        System.out.print(baseCord.getY());
-        System.out.print(",");
-        System.out.print(movelimit);
-        System.out.print(",");
-        System.out.print('\n');
         movelimit--;
         if(movelimit>0) {
             for(int i = 0; i<4; i++){
@@ -340,13 +332,18 @@ public class GameScreen extends PolyGoneScreen {
             }
         }
     }
+
     public void confirmMove(){
-        if(listOfCords.contains(selectedCord)){
-            selectedPiece.setCords(selectedCord);
-            currentLevel.getMap().put(selectedCord,selectedPiece);
-            currentLevel.getMap().remove(selectedPiece.getCords());
-            selectedPiece.getSprite().setPosition(selectedCord.getX(),selectedCord.getY());
+        if (selectedCord != null && selectedPiece != null && selectedPiece instanceof PlayerCharecter){
+            System.out.print("hi");
+            if(listOfCords.contains(selectedCord)){
+                currentLevel.getMap().put(selectedCord,selectedPiece);
+                currentLevel.getMap().remove(selectedPiece.getCords());
+                selectedPiece.setCords(selectedCord);
+                selectedPiece.getSprite().setPosition(selectedCord.getX(),selectedCord.getY());
+            }
         }
+
     }
 
 }
