@@ -40,8 +40,8 @@ public class GameScreen extends PolyGoneScreen {
     private int mapLength;
     private int mapWidth;
 
-    private int[] moveArrayX ={1,0,-1,0};
-    private int[] moveArrayY ={0,1,0,-1};
+    private int[] moveArrayX = {1, 0, -1, 0};
+    private int[] moveArrayY = {0, 1, 0, -1};
 
     private Texture purpleFade;
     private Sprite[] hourGlass = new Sprite[5];
@@ -54,12 +54,15 @@ public class GameScreen extends PolyGoneScreen {
     private Piece selectedPiece;
     private Environment currentLevel;
     private Cord selectedCord;
+
     private HashMap<Cord,Piece> map = new HashMap<Cord,Piece>();
+
     private Viewport viewPort;
     private Texture badlogictexture;
+
     private SpriteBatch floorbatch;
     private final Matrix4 floorMatrix = new Matrix4();
-    private  Sprite[][] floor;
+    private Sprite[][] floor;
     private ArrayList<Sprite> pieceSpriteArray = new ArrayList<Sprite>();
     private ArrayList<Cord> listOfCords = new ArrayList<Cord>();
     private Cord lastSelectedCord;
@@ -70,17 +73,15 @@ public class GameScreen extends PolyGoneScreen {
         super(game);
         this.game = game;
         currentLevel = new Environment();
-        currentLevel.addPieceToBoard(new HourGlass(new Cord(7,4)));
-        currentLevel.addPieceToBoard(new HourGlass(new Cord(6,4)));
-        for(int i  = 3; i <7;i++){
-            currentLevel.addPieceToBoard(new Wall(new Cord(5,i)));
+        currentLevel.addPieceToBoard(new HourGlass(new Cord(7, 4)));
+        currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
+        for (int i = 3; i < 7; i++) {
+            currentLevel.addPieceToBoard(new Wall(new Cord(5, i)));
         }
         stage = new Stage();
 
 
-
-
-        cam = new OrthographicCamera(10,10 * (Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+        cam = new OrthographicCamera(10, 10 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         cam.near = 1;
         cam.far = 100;
         cam.position.set(5, 5, 10);
@@ -93,15 +94,15 @@ public class GameScreen extends PolyGoneScreen {
         floor = new Sprite[mapLength][mapWidth];
         badlogictexture = new Texture(Gdx.files.internal("core/assets/GroundGrey.png"));
         floorMatrix.setToRotation(new Vector3(1, 0, 0), 90);
-        for(int z = 0; z < mapLength; z++) {
-            for(int x = 0; x < mapWidth; x++) {
+        for (int z = 0; z < mapLength; z++) {
+            for (int x = 0; x < mapWidth; x++) {
                 floor[x][z] = new Sprite(badlogictexture);
-                floor[x][z].setPosition(x,z);
+                floor[x][z].setPosition(x, z);
                 floor[x][z].setSize(1, 1);
             }
         }
         for (Cord key : currentLevel.getMap().keySet()) {
-            currentLevel.getMap().get(key).setSprite(new Sprite(new Texture(Gdx.files.internal(currentLevel.getMap().get(key).getTexture())))) ;
+            currentLevel.getMap().get(key).setSprite(new Sprite(new Texture(Gdx.files.internal(currentLevel.getMap().get(key).getTexture()))));
             currentLevel.getMap().get(key).getSprite().setPosition(key.getX(), key.getY());
             currentLevel.getMap().get(key).getSprite().setSize(1, 1);
         }
@@ -110,12 +111,13 @@ public class GameScreen extends PolyGoneScreen {
         InputMultiplexer multiplexer = new InputMultiplexer();
 
 
-         multiplexer.addProcessor(new InputAdapter() {
-            @Override public boolean touchDragged (int x, int y, int pointer) {
+        multiplexer.addProcessor(new InputAdapter() {
+            @Override
+            public boolean touchDragged(int x, int y, int pointer) {
                 Ray pickRay = cam.getPickRay(x, y);
                 Intersector.intersectRayPlane(pickRay, xzPlane, curr);
 
-                if(!(last.x == -1 && last.y == -1 && last.z == -1)) {
+                if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
                     pickRay = cam.getPickRay(last.x, last.y);
                     Intersector.intersectRayPlane(pickRay, xzPlane, delta);
                     delta.sub(curr);
@@ -126,7 +128,8 @@ public class GameScreen extends PolyGoneScreen {
             }
 
 
-            @Override public boolean touchUp(int x, int y, int pointer, int button) {
+            @Override
+            public boolean touchUp(int x, int y, int pointer, int button) {
                 last.set(-1, -1, -1);
                 return false;
             }
@@ -161,7 +164,7 @@ public class GameScreen extends PolyGoneScreen {
                 if ((amount > 0 && cam.zoom <= 0.25) || (amount < 0 && cam.zoom >= 5)) {
                     return false;
                 }
-                cam.zoom += (amount/10.0);
+                cam.zoom += (amount / 10.0);
                 cam.update();
                 return false;
 
@@ -197,13 +200,14 @@ public class GameScreen extends PolyGoneScreen {
 
         buttonConfirmMove.setWidth(200f);
         buttonConfirmMove.setHeight(20f);
-        buttonConfirmMove.setPosition(Gdx.graphics.getWidth()-200f, 200f);
+        buttonConfirmMove.setPosition(Gdx.graphics.getWidth() - 200f, 200f);
 
         stage.addActor(buttonConfirmMove);
 
     }
 
-    @Override public void render(float delta) {
+    @Override
+    public void render(float delta) {
 
         drawMap();
 
@@ -246,9 +250,6 @@ public class GameScreen extends PolyGoneScreen {
     final Vector3 delta = new Vector3();
 
 
-
-
-
     private void checkTileTouched() {
         if (Gdx.input.justTouched()) {
             Ray pickRay = cam.getPickRay(Gdx.input.getX(), Gdx.input.getY());
@@ -264,39 +265,39 @@ public class GameScreen extends PolyGoneScreen {
                     }
 
                 }
-                if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
-                    selectedCord = new Cord(x, z);
-                    if (lastSelectedTile != null) lastSelectedTile.setColor(1, 1, 1, 1);
+                selectedCord = new Cord(x, z);
+                if (lastSelectedTile != null) lastSelectedTile.setColor(1, 1, 1, 1);
 
-                    if (currentLevel.getMap().containsKey(selectedCord)) {
-                        selectedPiece = currentLevel.getMap().get(selectedCord);
+                if (currentLevel.getMap().containsKey(selectedCord)) {
+                    if(currentLevel.getMap().get(selectedCord) instanceof PlayerCharecter)
+                    selectedPiece = currentLevel.getMap().get(selectedCord);
+                }
+
+                if (selectedPiece instanceof PlayerCharecter) {
+                    for (Cord drawCord : listOfCords) {
+                        floor[drawCord.getX()][drawCord.getY()].setColor(1, 1, 1, 1);
                     }
-
-                    if (selectedPiece instanceof PlayerCharecter) {
-                        for (Cord drawCord : listOfCords) {
-                            floor[drawCord.getX()][drawCord.getY()].setColor(1, 1, 1, 1);
-                        }
-                        for (Sprite E : pieceSpriteArray) {
-                            if (E.getX() == x && E.getY() == z)
-                                E.setColor(1, 0, 0, 1);
-                        }
-                        listOfCords.clear();
-                        nextCord(selectedPiece.getCords(), selectedPiece.getMoveLimit());
-                        for (Cord drawCord : listOfCords) {
-                            floor[drawCord.getX()][drawCord.getY()].setColor(0, 1, 1, 1);
-                        }
-
+                    for (Sprite E : pieceSpriteArray) {
+                        if (E.getX() == x && E.getY() == z)
+                            E.setColor(1, 0, 0, 1);
                     }
-                    Sprite sprite = floor[x][z];
-                    sprite.setColor(1, 0, 0, 1);
-                    lastSelectedTile = sprite;
-                    lastSelectedCord = selectedCord;
+                    listOfCords.clear();
+                    nextCord(selectedPiece.getCords(), selectedPiece.getMoveLimit());
+                    for (Cord drawCord : listOfCords) {
+                        floor[drawCord.getX()][drawCord.getY()].setColor(0, 1, 1, 1);
+                    }
 
                 }
+                Sprite sprite = floor[x][z];
+                sprite.setColor(1, 0, 0, 1);
+                lastSelectedTile = sprite;
+                lastSelectedCord = selectedCord;
+
             }
         }
     }
-    private void drawMap(){
+
+    private void drawMap() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         cam.update();
@@ -316,26 +317,28 @@ public class GameScreen extends PolyGoneScreen {
 
         floorbatch.end();
     }
-    private void highlight(){
+
+    private void highlight() {
 
     }
-    private void nextCord(Cord baseCord,int movelimit){
+
+    private void nextCord(Cord baseCord, int movelimit) {
         movelimit--;
-        if(movelimit>0) {
-            for(int i = 0; i<4; i++){
+        if (movelimit > 0) {
+            for (int i = 0; i < 4; i++) {
                 boolean preventMove = false;
-                Cord newCord = new Cord(baseCord.getX() + moveArrayX[i], baseCord.getY()+ moveArrayY[i]);
+                Cord newCord = new Cord(baseCord.getX() + moveArrayX[i], baseCord.getY() + moveArrayY[i]);
                 Piece tempPiece = currentLevel.checkCordForPiece(newCord);
 
                 if (tempPiece != null) {
                     preventMove = tempPiece.preventsMovement();
                 }
                 if (!preventMove) {
-                    if( newCord.getX() >= 0 && newCord.getY() >= 0 && newCord.getX() < mapLength && newCord.getY() < mapWidth){
-                        if(!listOfCords.contains(newCord)) {
+                    if (newCord.getX() >= 0 && newCord.getY() >= 0 && newCord.getX() < mapLength && newCord.getY() < mapWidth) {
+                        if (!listOfCords.contains(newCord)) {
                             listOfCords.add(newCord);
                         }
-                        nextCord( newCord, movelimit);
+                        nextCord(newCord, movelimit);
                     }
                 }
             }
@@ -346,12 +349,18 @@ public class GameScreen extends PolyGoneScreen {
         if (selectedCord != null && selectedPiece != null && selectedPiece instanceof PlayerCharecter){
             if(listOfCords.contains(selectedCord)){
                 currentLevel.getMap().put(selectedCord,selectedPiece);
+
                 currentLevel.getMap().remove(selectedPiece.getCords());
                 selectedPiece.setCords(selectedCord);
-                selectedPiece.getSprite().setPosition(selectedCord.getX(),selectedCord.getY());
+                selectedPiece.getSprite().setPosition(selectedCord.getX(), selectedCord.getY());
+                for (Cord drawCord : listOfCords) {
+                    floor[drawCord.getX()][drawCord.getY()].setColor(1, 1, 1, 1);
+                }
+                selectedPiece = null;
             }
         }
 
     }
-
 }
+
+
