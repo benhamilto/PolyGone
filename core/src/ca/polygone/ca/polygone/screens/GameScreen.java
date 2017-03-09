@@ -179,12 +179,18 @@ public class GameScreen extends PolyGoneScreen {
 
         final TextButton buttonConfirmMove = new TextButton("Confirm Move", skin);
 
-        buttonConfirmMove.addListener(new ClickListener() {
+        buttonConfirmMove.addListener(new InputListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
                 confirmMove();
+                return true;
             }
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button)
+            {
+                event.stop();
 
+            }
 
         });
 
@@ -338,7 +344,6 @@ public class GameScreen extends PolyGoneScreen {
 
     public void confirmMove(){
         if (selectedCord != null && selectedPiece != null && selectedPiece instanceof PlayerCharecter){
-            System.out.print("hi");
             if(listOfCords.contains(selectedCord)){
                 currentLevel.getMap().put(selectedCord,selectedPiece);
                 currentLevel.getMap().remove(selectedPiece.getCords());
