@@ -19,9 +19,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -56,14 +54,14 @@ public class GameScreen extends PolyGoneScreen {
     private Piece selectedPiece;
     private Environment currentLevel;
     private Cord selectedCord;
-    private HashMap<Cord,Piece> map = new HashMap<>();
+    private HashMap<Cord,Piece> map = new HashMap<Cord,Piece>();
     private Viewport viewPort;
     private Texture badlogictexture;
     private SpriteBatch floorbatch;
     private final Matrix4 floorMatrix = new Matrix4();
     private  Sprite[][] floor;
-    private ArrayList<Sprite> pieceSpriteArray = new ArrayList<>();
-    private ArrayList<Cord> listOfCords = new ArrayList<>();
+    private ArrayList<Sprite> pieceSpriteArray = new ArrayList<Sprite>();
+    private ArrayList<Cord> listOfCords = new ArrayList<Cord>();
     private Cord lastSelectedCord;
     private Skin skin;
 
@@ -169,8 +167,8 @@ public class GameScreen extends PolyGoneScreen {
 
             }
         });
-        multiplexer.addProcessor(stage);
 
+        multiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -180,18 +178,24 @@ public class GameScreen extends PolyGoneScreen {
 
 
         final TextButton buttonConfirmMove = new TextButton("Confirm Move", skin);
+
         buttonConfirmMove.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("it works");
+
             }
+
+
         });
+
 
         buttonConfirmMove.setWidth(200f);
         buttonConfirmMove.setHeight(20f);
         buttonConfirmMove.setPosition(Gdx.graphics.getWidth()-200f, 200f);
 
         stage.addActor(buttonConfirmMove);
+
     }
 
     @Override public void render(float delta) {
