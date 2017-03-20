@@ -84,9 +84,9 @@ public class GameScreen extends PolyGoneScreen {
         cam = new OrthographicCamera(10, 10 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         cam.near = 1;
         cam.far = 100;
-        cam.position.set(5, 5, 10);
+        cam.position.set(10, 5, 10);
         cam.direction.set(-1, -1, -1);
-        cam.zoom = 1;
+        cam.zoom = 1.5f;
 
 
         mapLength = 10;
@@ -161,7 +161,7 @@ public class GameScreen extends PolyGoneScreen {
 
             @Override
             public boolean scrolled(int amount) {
-                if ((amount > 0 && cam.zoom <= 0.25) || (amount < 0 && cam.zoom >= 5)) {
+                if ((amount < 0 && cam.zoom <= 0.25) || (amount > 0 && cam.zoom >= 5)) {
                     return false;
                 }
                 cam.zoom += (amount / 10.0);
@@ -186,6 +186,8 @@ public class GameScreen extends PolyGoneScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
                 confirmMove();
+                System.out.println(cam.position);
+                System.out.println(cam.zoom);
                 return true;
             }
             @Override
