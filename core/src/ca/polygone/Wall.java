@@ -1,5 +1,7 @@
 package ca.polygone;
 
+
+
 /**
  * Created by John on 2017-03-05.
  */
@@ -9,9 +11,7 @@ public class Wall extends StaticObstacle {
         preventsMovement = true;
         texturePath = "core/assets/WallMiddle.png";
     }
-    public Cord getCords(){
-        return cords;
-    }
+
     public boolean preventsMovement(){
         return preventsMovement;
     }
@@ -20,4 +20,5 @@ public class Wall extends StaticObstacle {
     public String getTexture() {
         return texturePath ;
     }
+
 }
