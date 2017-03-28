@@ -13,7 +13,8 @@ public class Environment {
     private int mapLength;
     private int mapWidth;
     private HashMap<Cord,Piece> Map;
-    private ArrayList<Piece> pieceSpriteArray = new ArrayList<Piece>();
+    private ArrayList<Piece> playerPieces = new ArrayList<Piece>();
+    private ArrayList<Piece> nonPlayerPieces = new ArrayList<Piece>();
     private int[] moveArrayX = {1, 0, -1, 0};
     private int[] moveArrayY = {0, 1, 0, -1};
     Sprite lastSelectedTile = null;
@@ -48,8 +49,12 @@ public class Environment {
     public void addPieceToBoard(Piece newPiece){
         Map.put(newPiece.getCords(),newPiece);
         if(newPiece instanceof PlayerCharecter){
-            pieceSpriteArray.add(newPiece);
+            playerPieces.add(newPiece);
         }
+        if(newPiece instanceof NonPlayerCharacter){
+            nonPlayerPieces.add(newPiece);
+        }
+
     }
 
     public void movePiece(Piece pieceToMove, Cord newCords){
@@ -102,7 +107,7 @@ public class Environment {
             for (Cord drawCord : listOfCords) {
                 floor.get(drawCord).setColor(1, 1, 1, 1);
             }
-            for (Piece E : pieceSpriteArray) {
+            for (Piece E : playerPieces) {
                 if (E.getCords().getX() == x && E.getCords().getX() == z)
                     E.getSprite().setColor(1, 0, 0, 1);
             }
@@ -138,6 +143,11 @@ public class Environment {
                     }
                 }
             }
+        }
+    }
+    private void nonPlayerTurn(){
+        for(Piece E : nonPlayerPieces){
+            
         }
     }
 
