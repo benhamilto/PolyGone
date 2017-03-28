@@ -162,6 +162,7 @@ public class GameScreen extends PolyGoneScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 currentLevel.confirmMove();
+                currentLevel.getVisibleCords();
             }
 
 
@@ -249,6 +250,7 @@ public class GameScreen extends PolyGoneScreen {
             currentLevel.getMap().get(key).getSprite().draw(floorbatch);
         }
 
+        
         floorbatch.end();
     }
 

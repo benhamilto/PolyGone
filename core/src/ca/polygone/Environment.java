@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static java.lang.Math.abs;
+
 /**
  * Created by John on 2017-03-05.
  */
@@ -123,6 +126,177 @@ public class Environment {
         lastSelectedTile = sprite;
         lastSelectedCord = selectedCord;
     }
+
+    public void getVisibleCords() {
+        drawcircle(4,4, 3);
+
+    }
+
+
+
+    private void drawcircle(int x0, int y0, int radius)
+    {
+        ArrayList<Cord> boundaryCoords = new ArrayList<Cord>();
+        ArrayList<Cord> circleCoords = new ArrayList<Cord>();
+        ArrayList<Cord> toRemove = new ArrayList<Cord>();
+
+        int x = radius;
+        int y = 0;
+        int err = 0;
+
+        //Midpoint circle algorithm
+        while (x >= y)
+        {
+            if(x0+x <= mapWidth && y0+y <= mapLength)
+                boundaryCoords.add(new Cord(x0 + x, y0 + y));
+            if(x0+y <= mapWidth && y0+x <= mapLength)
+                boundaryCoords.add(new Cord(x0 + y, y0 + x));
+            if(x0-y >= 0 && y0+x <= mapWidth )
+                boundaryCoords.add(new Cord((x0 - y), y0 + x));
+            if(x0 - x >= 0 && y0 + y <= mapLength)
+                boundaryCoords.add(new Cord((x0 - x), y0 + y));
+            if(x0 - x >= 0 && y0 - y >= 0)
+                boundaryCoords.add(new Cord((x0 - x), y0 - y));
+            if(x0 - y >= 0 && y0 - x >= 0)
+                boundaryCoords.add(new Cord((x0 - y), y0 - x));
+            if(x0 + y <= mapWidth && y0 - x >= 0)
+                boundaryCoords.add(new Cord((x0 + y), y0 - x));
+            if(x0 + x <= mapWidth && y0 - x >= 0)
+                boundaryCoords.add(new Cord((x0 + x), y0 - y));
+
+            if (err <= 0)
+            {
+                y += 1;
+                err += 2*y + 1;
+            }
+            if (err > 0)
+            {
+                x -= 1;
+                err -= 2*x + 1;
+            }
+        }
+
+        //Bresenham's line algorithm
+        for(Cord c : boundaryCoords){
+
+            int x1 = c.getX();
+            int y1 = c.getY();
+            int dx,dy,dx1,dy1,px,py,xe,ye,i;
+            dx=x1-x0;
+            dy=y1-y1;
+            dx1=abs(dx);
+            dy1=abs(dy);
+            px=2*dy1-dx1;
+            py=2*dx1-dy1;
+            if(dy1<=dx1)
+            {
+                if(dx>=0)
+                {
+                    x=x0;
+                    y=y1;
+                    xe=x1;
+                }
+                else
+                {
+                    x=x1;
+                    y=y1;
+                    xe=x0;
+                }
+                if(!(checkCordForPiece(new Cord(x,y)) instanceof Obstacle))
+                    circleCoords.add(new Cord(x,y));
+                else {
+                    toRemove.add(c);
+                    break;
+                }
+                for(i=0;x<xe;i++)
+                {
+                    x=x+1;
+                    if(px<0)
+                    {
+                        px=px+2*dy1;
+                    }
+                    else
+                    {
+                        if((dx<0 && dy<0) || (dx>0 && dy>0))
+                        {
+                            y=y+1;
+                        }
+                        else
+                        {
+                            y=y-1;
+                        }
+                        px=px+2*(dy1-dx1);
+                    }
+                    if(!(checkCordForPiece(new Cord(x,y)) instanceof Obstacle))
+                        circleCoords.add(new Cord(x,y));
+                    else {
+                        toRemove.add(c);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if(dy>=0)
+                {
+                    x=x0;
+                    y=y1;
+                    ye=y1;
+                }
+                else
+                {
+                    x=x1;
+                    y=y1;
+                    ye=y1;
+                }
+                if(!(checkCordForPiece(new Cord(x,y)) instanceof Obstacle))
+                    circleCoords.add(new Cord(x,y));
+                else {
+                    toRemove.add(c);
+                    break;
+                }
+                for(i=0;y<ye;i++)
+                {
+                    y=y+1;
+                    if(py<=0)
+                    {
+                        py=py+2*dx1;
+                    }
+                    else
+                    {
+                        if((dx<0 && dy<0) || (dx>0 && dy>0))
+                        {
+                            x=x+1;
+                        }
+                        else
+                        {
+                            x=x-1;
+                        }
+                        py=py+2*(dx1-dy1);
+                    }
+
+                    if(!(checkCordForPiece(new Cord(x,y)) instanceof Obstacle))
+                        circleCoords.add(new Cord(x,y));
+                    else {
+                        toRemove.add(c);
+                        break;
+                    }
+                }
+            }
+        }
+
+        boundaryCoords.removeAll(toRemove);
+
+        for (Cord drawCord : circleCoords) {
+            floor.get(drawCord).setColor(0, 1, 0, 1);
+        }
+        for (Cord drawCord : boundaryCoords) {
+            if(!(checkCordForPiece(drawCord) instanceof Obstacle))
+                floor.get(drawCord).setColor(0,1,0,1);
+        }
+    }
+
+
     private void nextCord(Cord baseCord, int movelimit) {
         movelimit--;
         if (movelimit > 0) {
