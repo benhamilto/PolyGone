@@ -90,7 +90,7 @@ public class GameScreen extends PolyGoneScreen {
 
         InputMultiplexer multiplexer = new InputMultiplexer();
 
-
+        multiplexer.addProcessor(stage);
         multiplexer.addProcessor(new InputAdapter() {
             @Override
             public boolean touchDragged(int x, int y, int pointer) {
@@ -105,6 +105,7 @@ public class GameScreen extends PolyGoneScreen {
                 }
                 last.set(x, y, 0);
                 return false;
+
             }
 
 
@@ -131,6 +132,16 @@ public class GameScreen extends PolyGoneScreen {
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                if (Gdx.input.justTouched()) {
+                    Ray pickRay = cam.getPickRay(Gdx.input.getX(), Gdx.input.getY());
+                    Intersector.intersectRayPlane(pickRay, xzPlane, intersection);
+                    int x = (int) intersection.x;
+                    int z = (int) intersection.z;
+
+                    if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
+                        currentLevel.select(x,z);
+                    }
+                }
                 return false;
             }
 
@@ -152,7 +163,7 @@ public class GameScreen extends PolyGoneScreen {
             }
         });
 
-        multiplexer.addProcessor(stage);
+
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -186,8 +197,6 @@ public class GameScreen extends PolyGoneScreen {
 
         drawMap();
         stage.draw();
-        checkTileTouched();
-
     }
 
     @Override
@@ -222,19 +231,6 @@ public class GameScreen extends PolyGoneScreen {
     final Vector3 last = new Vector3(-1, -1, -1);
     final Vector3 delta = new Vector3();
 
-
-    private void checkTileTouched() {
-        if (Gdx.input.justTouched()) {
-            Ray pickRay = cam.getPickRay(Gdx.input.getX(), Gdx.input.getY());
-            Intersector.intersectRayPlane(pickRay, xzPlane, intersection);
-            int x = (int) intersection.x;
-            int z = (int) intersection.z;
-
-            if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
-                currentLevel.select(x,z);
-            }
-        }
-    }
 
     private void drawMap() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
