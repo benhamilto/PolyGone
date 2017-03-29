@@ -54,16 +54,6 @@ public class GameScreen extends PolyGoneScreen {
         environment = new Environment();
         game.environment = environment;
 
-//        environment.addPieceToBoard(new HourGlass(new Cord(7, 4)));
-//
-//        environment.addPieceToBoard(new HourGlass(new Cord(6, 4)));
-//        environment.addPieceToBoard(new Circle(new Cord(3,3)));
-//        environment.addPieceToBoard(new Circle(new Cord(4,3)));
-//        environment.addPieceToBoard(new Circle(new Cord(2,3)));
-//
-//        for (int i = 3; i < 7; i++) {
-//            environment.addPieceToBoard(new WallHoriz(new Cord(5, i)));
-//        }
         stage = new Stage();
 
 

@@ -43,12 +43,14 @@ public class Environment {
         int mapWidth = currentLevel.getMapWidth();
         int mapLength = currentLevel.getMapLength();
         playerPieces = currentLevel.getPlayerPieces();
+        nonPlayerPieces = currentLevel.getNonPlayerPieces();
         victoryCords = currentLevel.getVictoryCords();
-        Map = currentLevel.getMap();
+
         badlogictexture = new Texture(Gdx.files.internal("core/assets/GroundGrey.png"));
         floor = new HashMap<Cord, Sprite>();
         darkMap = new HashMap<Cord, Sprite>();
 
+        Map = currentLevel.getMap();
         for (int z = 0; z < mapLength; z++) {
             for (int x = 0; x < mapWidth; x++) {
                 floor.put(new Cord(x, z), new Sprite(badlogictexture));

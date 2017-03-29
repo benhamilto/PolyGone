@@ -47,4 +47,8 @@ public abstract class PolyGoneLevel {
     public ArrayList<Piece> getPlayerPieces() {
         return playerPieces;
     }
+
+    public ArrayList<Piece> getNonPlayerPieces() {
+        return nonPlayerPieces;
+    }
 }
