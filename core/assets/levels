@@ -1,0 +1,21 @@
+{
+  "Levels": [{
+    "id": "1",
+    "Pieces": [{
+      "type": "wall",
+      "xloc": "0",
+      "yloc": "1"
+    }, {
+      "type": "wall",
+      "xloc": "1",
+      "yloc": "1"
+    }, {
+      "type": "hourglass",
+      "xloc": "7",
+      "yloc": "5"
+    }]
+
+  }
+
+  ]
+}

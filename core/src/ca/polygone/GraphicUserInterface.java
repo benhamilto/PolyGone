@@ -11,7 +11,7 @@ public class GraphicUserInterface extends Game {
 
     public SpriteBatch batch;
     public BitmapFont font;
-    public Environment currentLevel;
+    public Environment environment;
 
     public GraphicUserInterface(){
     }
@@ -26,18 +26,18 @@ public class GraphicUserInterface extends Game {
 
     public void render(){
         super.render();
-        if(currentLevel != null) {
-            if (currentLevel.isPlayerTurnDone()) {
-                currentLevel.nonPlayerTurn();
-                currentLevel.resetPlayerPieces();
+        if(environment != null) {
+            if (environment.isPlayerTurnDone()) {
+                environment.nonPlayerTurn();
+                environment.resetPlayerPieces();
             }
-            if( currentLevel.checkForDefeat()) {
-                currentLevel = null;
+            if( environment.checkForDefeat()) {
+                environment = null;
                 this.getScreen().dispose();
                 this.setScreen(new GameOverScreen(this));
             }
-            else if(currentLevel.checkForVictory()){
-                currentLevel = null;
+            else if(environment.checkForVictory()){
+                environment = null;
                 this.getScreen().dispose();
                 this.setScreen(new VictoryScreen(this));
             }

@@ -5,8 +5,8 @@ package ca.polygone;
 /**
  * Created by John on 2017-03-05.
  */
-public class Wall extends StaticObstacle {
-    public Wall(Cord startCords){
+public class WallHoriz extends StaticObstacle {
+    public WallHoriz(Cord startCords){
         cords = startCords;
         preventsMovement = true;
         texturePath = "core/assets/WallMiddle.png";

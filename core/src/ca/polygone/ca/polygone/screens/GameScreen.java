@@ -3,10 +3,8 @@ package ca.polygone.ca.polygone.screens;
 import ca.polygone.*;
 
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,16 +18,10 @@ import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Ben on 2017-03-05.
@@ -43,7 +35,7 @@ public class GameScreen extends PolyGoneScreen {
     private Stage stage;
 
     private OrthographicCamera cam;
-    private Environment currentLevel;
+    private Environment environment;
 
 
     private SpriteBatch floorbatch;
@@ -51,26 +43,27 @@ public class GameScreen extends PolyGoneScreen {
 
     private Skin skin;
     private VerticalGroup turnButtons;
+    private InputMultiplexer multiplexer;
 
 
     public GameScreen(GraphicUserInterface game) {
 
         super(game);
         this.game = game;
-        mapLength = 10;
-        mapWidth = 10;
-        currentLevel = new Environment(mapLength,mapWidth);
-        game.currentLevel = currentLevel;
-        currentLevel.addPieceToBoard(new HourGlass(new Cord(7, 4)));
 
-        currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
-        currentLevel.addPieceToBoard(new Circle(new Cord(3,3)));
-        currentLevel.addPieceToBoard(new Circle(new Cord(4,3)));
-        currentLevel.addPieceToBoard(new Circle(new Cord(2,3)));
+        environment = new Environment();
+        game.environment = environment;
 
-        for (int i = 3; i < 7; i++) {
-            currentLevel.addPieceToBoard(new Wall(new Cord(5, i)));
-        }
+//        environment.addPieceToBoard(new HourGlass(new Cord(7, 4)));
+//
+//        environment.addPieceToBoard(new HourGlass(new Cord(6, 4)));
+//        environment.addPieceToBoard(new Circle(new Cord(3,3)));
+//        environment.addPieceToBoard(new Circle(new Cord(4,3)));
+//        environment.addPieceToBoard(new Circle(new Cord(2,3)));
+//
+//        for (int i = 3; i < 7; i++) {
+//            environment.addPieceToBoard(new WallHoriz(new Cord(5, i)));
+//        }
         stage = new Stage();
 
 
@@ -83,15 +76,15 @@ public class GameScreen extends PolyGoneScreen {
 
         floorMatrix.setToRotation(new Vector3(1, 0, 0), 90);
 
-        for (Cord key : currentLevel.getMap().keySet()) {
-            currentLevel.getMap().get(key).setSprite(new Sprite(new Texture(Gdx.files.internal(currentLevel.getMap().get(key).getTexture()))));
-            currentLevel.getMap().get(key).getSprite().setPosition(key.getX(), key.getY());
-            currentLevel.getMap().get(key).getSprite().setSize(1, 1);
+        for (Cord key : environment.getMap().keySet()) {
+            environment.getMap().get(key).setSprite(new Sprite(new Texture(Gdx.files.internal(environment.getMap().get(key).getTexture()))));
+            environment.getMap().get(key).getSprite().setPosition(key.getX(), key.getY());
+            environment.getMap().get(key).getSprite().setSize(1, 1);
         }
         floorbatch = new SpriteBatch();
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
-
+        multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
 
         multiplexer.addProcessor(new InputAdapter() {
             @Override
@@ -153,8 +146,6 @@ public class GameScreen extends PolyGoneScreen {
 
             }
         });
-
-        multiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -176,9 +167,13 @@ public class GameScreen extends PolyGoneScreen {
 
         buttonConfirmMove.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                currentLevel.confirmMove();
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                environment.confirmMove();
+                return true;
             }
+
+
+
 
         });
 
@@ -244,7 +239,7 @@ public class GameScreen extends PolyGoneScreen {
             int z = (int) intersection.z;
 
             if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
-                currentLevel.select(x,z);
+                environment.select(x,z);
             }
         }
     }
@@ -258,15 +253,15 @@ public class GameScreen extends PolyGoneScreen {
         floorbatch.setTransformMatrix(floorMatrix);
         floorbatch.begin();
 
-        for (Cord key : currentLevel.getFloor().keySet()){
-            currentLevel.getFloor().get(key).draw(floorbatch);
+        for (Cord key : environment.getFloor().keySet()){
+            environment.getFloor().get(key).draw(floorbatch);
         }
-        for (Cord key : currentLevel.getMap().keySet()) {
-            currentLevel.getMap().get(key).getSprite().draw(floorbatch);
+        for (Cord key : environment.getMap().keySet()) {
+            environment.getMap().get(key).getSprite().draw(floorbatch);
         }
         for (int z = 0; z < mapLength; z++) {
             for (int x = 0; x < mapWidth; x++) {
-                currentLevel.getDarkMap().get(new Cord(x,z)).draw(floorbatch);
+                environment.getDarkMap().get(new Cord(x,z)).draw(floorbatch);
             }
         }
 
