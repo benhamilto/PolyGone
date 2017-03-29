@@ -60,10 +60,12 @@ public class GameScreen extends PolyGoneScreen {
         currentLevel = new Environment(mapLength,mapWidth);
         game.currentLevel = currentLevel;
         currentLevel.addPieceToBoard(new HourGlass(new Cord(7, 4)));
+
         currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
         currentLevel.addPieceToBoard(new Circle(new Cord(3,3)));
         currentLevel.addPieceToBoard(new Circle(new Cord(4,3)));
         currentLevel.addPieceToBoard(new Circle(new Cord(2,3)));
+
         for (int i = 3; i < 7; i++) {
             currentLevel.addPieceToBoard(new Wall(new Cord(5, i)));
         }
@@ -165,6 +167,7 @@ public class GameScreen extends PolyGoneScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 currentLevel.confirmMove();
+//                currentLevel.getVisibleCords();
             }
 
         });
@@ -226,6 +229,7 @@ public class GameScreen extends PolyGoneScreen {
             Intersector.intersectRayPlane(pickRay, xzPlane, intersection);
             int x = (int) intersection.x;
             int z = (int) intersection.z;
+
             if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
                 currentLevel.select(x,z);
             }
@@ -247,6 +251,13 @@ public class GameScreen extends PolyGoneScreen {
         for (Cord key : currentLevel.getMap().keySet()) {
             currentLevel.getMap().get(key).getSprite().draw(floorbatch);
         }
+        for (int z = 0; z < mapLength; z++) {
+            for (int x = 0; x < mapWidth; x++) {
+                currentLevel.getDarkMap().get(new Cord(x,z)).draw(floorbatch);
+            }
+        }
+
+
 
         floorbatch.end();
     }

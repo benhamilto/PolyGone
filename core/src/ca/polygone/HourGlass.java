@@ -9,5 +9,7 @@ public class HourGlass  extends PlayerCharecter{
         texturePath = "core/assets/NewHourGlass.png";
         moveLimit = 5;
         moveLeft = moveLimit;
+        vision = 3;
+
     }
 }

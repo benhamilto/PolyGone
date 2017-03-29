@@ -1,4 +1,5 @@
 package ca.polygone;
+import ca.polygone.ca.polygone.screens.GameOverScreen;
 import ca.polygone.ca.polygone.screens.MenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
