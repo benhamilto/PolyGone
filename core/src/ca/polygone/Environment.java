@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,6 +23,7 @@ public class Environment {
     private int[] moveArrayY = {0, 1, 0, -1};
     Sprite lastSelectedTile = null;
     private HashMap<Cord,Sprite> floor;
+    private HashMap<Cord,Sprite> darkMap;
     private Piece selectedPiece;
     private Cord selectedCord;
     private ArrayList<Cord> listOfCords = new ArrayList<Cord>();
@@ -33,6 +35,8 @@ public class Environment {
         mapWidth = newWidth;
         badlogictexture = new Texture(Gdx.files.internal("core/assets/GroundGrey.png"));
         floor = new  HashMap<Cord,Sprite>();
+        darkMap = new HashMap<Cord, Sprite>();
+
         Map = new HashMap<Cord,Piece>();
         for (int z = 0; z < mapLength; z++) {
             for (int x = 0; x < mapWidth; x++) {
@@ -41,6 +45,20 @@ public class Environment {
                 floor.get(new Cord(x,z)).setSize(1, 1);
             }
         }
+
+        for (int z = 0; z < mapLength; z++) {
+            for (int x = 0; x < mapWidth; x++) {
+                darkMap.put(new Cord(x,z),new Sprite(badlogictexture));
+                darkMap.get(new Cord(x,z)).setPosition(x, z);
+                darkMap.get(new Cord(x,z)).setSize(1, 1);
+                darkMap.get(new Cord(x,z)).setColor(0,0,0,1);
+            }
+        }
+
+
+
+
+
 
     }
     public HashMap<Cord,Sprite> getFloor(){return floor;}
@@ -127,41 +145,46 @@ public class Environment {
         lastSelectedCord = selectedCord;
     }
 
-    public void getVisibleCords() {
-        drawcircle(4,4, 3);
+    public HashMap<Cord,Sprite> getDarkMap() {
+        ArrayList<Cord> visiblecords = new ArrayList<Cord>();
 
+        for(Piece p : playerPieces) {
+            visiblecords.addAll(getVisibleForCharacter((PlayerCharecter)p)); //playerPieces only has playerCharacters
+        }
+
+        for (Cord drawCord : visiblecords) {
+            if(floor.get(drawCord) != null){
+                darkMap.get(drawCord).setColor(0, 0, 0, 0);
+            }
+
+        }
+        return darkMap;
     }
 
 
 
-    private void drawcircle(int x0, int y0, int radius)
+    private ArrayList<Cord> getVisibleForCharacter(PlayerCharecter p)
     {
         ArrayList<Cord> boundaryCoords = new ArrayList<Cord>();
         ArrayList<Cord> circleCoords = new ArrayList<Cord>();
         ArrayList<Cord> toRemove = new ArrayList<Cord>();
 
-        int x = radius;
+        int x0 = p.getCords().getX();
+        int y0 = p.getCords().getY();
+        int x = p.getVision();
         int y = 0;
         int err = 0;
 
         //Midpoint circle algorithm
         while (x >= y)
         {
-            if(x0+x <= mapWidth && y0+y <= mapLength)
                 boundaryCoords.add(new Cord(x0 + x, y0 + y));
-            if(x0+y <= mapWidth && y0+x <= mapLength)
                 boundaryCoords.add(new Cord(x0 + y, y0 + x));
-            if(x0-y >= 0 && y0+x <= mapWidth )
                 boundaryCoords.add(new Cord((x0 - y), y0 + x));
-            if(x0 - x >= 0 && y0 + y <= mapLength)
                 boundaryCoords.add(new Cord((x0 - x), y0 + y));
-            if(x0 - x >= 0 && y0 - y >= 0)
                 boundaryCoords.add(new Cord((x0 - x), y0 - y));
-            if(x0 - y >= 0 && y0 - x >= 0)
                 boundaryCoords.add(new Cord((x0 - y), y0 - x));
-            if(x0 + y <= mapWidth && y0 - x >= 0)
                 boundaryCoords.add(new Cord((x0 + y), y0 - x));
-            if(x0 + x <= mapWidth && y0 - x >= 0)
                 boundaryCoords.add(new Cord((x0 + x), y0 - y));
 
             if (err <= 0)
@@ -206,7 +229,7 @@ public class Environment {
                     circleCoords.add(new Cord(x,y));
                 else {
                     toRemove.add(c);
-                    break;
+                   // break;
                 }
                 for(i=0;x<xe;i++)
                 {
@@ -253,7 +276,7 @@ public class Environment {
                     circleCoords.add(new Cord(x,y));
                 else {
                     toRemove.add(c);
-                    break;
+                   // break;
                 }
                 for(i=0;y<ye;i++)
                 {
@@ -286,14 +309,17 @@ public class Environment {
         }
 
         boundaryCoords.removeAll(toRemove);
+        circleCoords.removeAll(toRemove);
 
-        for (Cord drawCord : circleCoords) {
-            floor.get(drawCord).setColor(0, 1, 0, 1);
-        }
-        for (Cord drawCord : boundaryCoords) {
-            if(!(checkCordForPiece(drawCord) instanceof Obstacle))
-                floor.get(drawCord).setColor(0,1,0,1);
-        }
+
+//        for (Cord drawCord : boundaryCoords) {
+//            if(!(checkCordForPiece(drawCord) instanceof Obstacle))
+//                if(floor.get(drawCord) != null){
+//                    floor.get(drawCord).setColor(0, 1, 0, 1);
+//                }
+//        }
+
+        return circleCoords;
     }
 
 
