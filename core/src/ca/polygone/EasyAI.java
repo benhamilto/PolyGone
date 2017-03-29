@@ -8,30 +8,39 @@ import java.util.Random;
  */
 public class EasyAI implements Artificialntelligence {
     private NonPlayerCharacter Character;
-    private Cord[] cordArray ;
+    private Cord newCord;
     EasyAI(NonPlayerCharacter newCharacter){
         Character = newCharacter;
     }
     @Override
-    public Movement chooseMove (HashMap<Cord,Piece> map) {
-        cordArray = new Cord[1];
+    public Cord chooseMove (HashMap<Cord,Piece> map) {
 
 
         Random randomno = new Random();
-        if(randomno.nextBoolean()){//x or y
-            if(randomno.nextBoolean()){//negative or positive
-                cordArray[0] = new Cord(Character.getCords().getX()+1,Character.getCords().getY());
-            }else{
-                cordArray[0] = new Cord(Character.getCords().getX()-1,Character.getCords().getY());
+        for(int i = 0; i < 100; i++) {
+            if (randomno.nextBoolean()) {//x or y
+                if (randomno.nextBoolean()) {//negative or positive
+                    newCord = new Cord(Character.getCords().getX() + 1, Character.getCords().getY());
+                } else {
+                    newCord = new Cord(Character.getCords().getX() - 1, Character.getCords().getY());
+                }
+            } else {
+                if (randomno.nextBoolean()) {
+                    newCord = new Cord(Character.getCords().getX(), Character.getCords().getY() + 1);
+                } else {
+                    newCord = new Cord(Character.getCords().getX(), Character.getCords().getY() - 1);
+                }
             }
-        }else{
-            if(randomno.nextBoolean()){
-                cordArray[0] = new Cord(Character.getCords().getX(),Character.getCords().getY()+1);
-            }else {
-                cordArray[0] = new Cord(Character.getCords().getX(),Character.getCords().getY()-1);
+            if(map.containsKey(newCord)) {
+                if (map.get(newCord) instanceof PlayerCharecter) {
+                    return newCord;
+                }else if (! map.get(newCord).preventsMovement()) {
+                    return newCord;
+                }
+            } else{
+                return newCord;
             }
         }
-        cordArray[0] = Character.getCords();
-        return new Movement(cordArray);
+        return Character.getCords();
     }
 }

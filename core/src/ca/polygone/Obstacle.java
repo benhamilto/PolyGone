@@ -19,6 +19,17 @@ public abstract class Obstacle implements Piece {
     public int getMoveLimit(){
         return 0;
     }
+    public int getMoveLeft() {
+        return 0;
+    }
+    public void resetMoveLeft() {
+    }
+
+    @Override
+    public void reduceMoveLeft(int valueToReduce) {
+
+    }
+
     public Sprite getSprite() {
         return drawSprite;
     }

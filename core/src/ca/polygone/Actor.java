@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public abstract class Actor implements Piece {
     protected Cord cords;
     protected int moveLimit;
+    protected int moveLeft;
     protected boolean preventsMovement = true;
     protected String texturePath;
     protected Sprite drawSprite;
+
 
     public Cord getCords() {
         return cords;
@@ -20,8 +22,17 @@ public abstract class Actor implements Piece {
         cords = newCords;
     }
 
+    @Override
+    public void reduceMoveLeft(int valueToReduce) {
+        moveLeft = moveLeft - valueToReduce;
+    }
+
     public int getMoveLimit(){
         return moveLimit;
+    }
+    public int getMoveLeft(){return moveLeft;}
+    public void resetMoveLeft() {
+        moveLeft = moveLimit;
     }
 
     public boolean preventsMovement(){

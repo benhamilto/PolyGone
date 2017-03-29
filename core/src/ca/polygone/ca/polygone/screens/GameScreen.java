@@ -52,13 +52,18 @@ public class GameScreen extends PolyGoneScreen {
 
 
     public GameScreen(GraphicUserInterface game) {
+
         super(game);
         this.game = game;
         mapLength = 10;
         mapWidth = 10;
         currentLevel = new Environment(mapLength,mapWidth);
+        game.currentLevel = currentLevel;
         currentLevel.addPieceToBoard(new HourGlass(new Cord(7, 4)));
         currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
+        currentLevel.addPieceToBoard(new Circle(new Cord(3,3)));
+        currentLevel.addPieceToBoard(new Circle(new Cord(4,3)));
+        currentLevel.addPieceToBoard(new Circle(new Cord(2,3)));
         for (int i = 3; i < 7; i++) {
             currentLevel.addPieceToBoard(new Wall(new Cord(5, i)));
         }
@@ -71,8 +76,6 @@ public class GameScreen extends PolyGoneScreen {
         cam.position.set(5, 5, 10);
         cam.direction.set(-1, -1, -1);
         cam.zoom = 1;
-
-
 
         floorMatrix.setToRotation(new Vector3(1, 0, 0), 90);
 
@@ -164,7 +167,6 @@ public class GameScreen extends PolyGoneScreen {
                 currentLevel.confirmMove();
             }
 
-
         });
 
 
@@ -180,7 +182,6 @@ public class GameScreen extends PolyGoneScreen {
     public void render(float delta) {
 
         drawMap();
-
         stage.draw();
         checkTileTouched();
 
@@ -240,10 +241,8 @@ public class GameScreen extends PolyGoneScreen {
         floorbatch.setTransformMatrix(floorMatrix);
         floorbatch.begin();
 
-        for (int z = 0; z < mapLength; z++) {
-            for (int x = 0; x < mapWidth; x++) {
-                currentLevel.getFloor().get(new Cord(x,z)).draw(floorbatch);
-            }
+        for (Cord key : currentLevel.getFloor().keySet()){
+            currentLevel.getFloor().get(key).draw(floorbatch);
         }
         for (Cord key : currentLevel.getMap().keySet()) {
             currentLevel.getMap().get(key).getSprite().draw(floorbatch);
@@ -256,9 +255,4 @@ public class GameScreen extends PolyGoneScreen {
 
     }
 
-
-
-
 }
-
-
