@@ -57,8 +57,8 @@ public class GameScreen extends PolyGoneScreen {
         mapLength = 10;
         mapWidth = 10;
         currentLevel = new Environment(mapLength,mapWidth);
-        currentLevel.addPieceToBoard(new HourGlass(new Cord(8, 4)));
-//        currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
+        currentLevel.addPieceToBoard(new HourGlass(new Cord(7, 4)));
+        currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
         for (int i = 3; i < 7; i++) {
             currentLevel.addPieceToBoard(new Wall(new Cord(5, i)));
         }

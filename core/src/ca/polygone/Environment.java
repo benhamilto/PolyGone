@@ -152,11 +152,20 @@ public class Environment {
             visiblecords.addAll(getVisibleForCharacter((PlayerCharecter)p)); //playerPieces only has playerCharacters
         }
 
-        for (Cord drawCord : visiblecords) {
-            if(floor.get(drawCord) != null){
-                darkMap.get(drawCord).setColor(0, 0, 0, 0);
-            }
+        for (int z = 0; z < mapLength; z++) {
+            for (int x = 0; x < mapWidth; x++) {
+                Cord drawCord = new Cord(x,z);
+                if(visiblecords.contains(drawCord)){
+                    if (darkMap.get(drawCord) != null) {
+                        darkMap.get(drawCord).setColor(0, 0, 0, 0);
+                    }
+                }
+//                else{
+//                    if(darkMap.get(drawCord) != null)
+//                        darkMap.get(drawCord).setColor(0,0,0,1);
+//                }
 
+            }
         }
         return darkMap;
     }
@@ -228,7 +237,7 @@ public class Environment {
                 if(!(checkCordForPiece(new Cord(x,y)) instanceof Obstacle))
                     circleCoords.add(new Cord(x,y));
                 else {
-                    toRemove.add(c);
+//                    toRemove.add(c);
                    // break;
                 }
                 for(i=0;x<xe;i++)
@@ -311,13 +320,6 @@ public class Environment {
         boundaryCoords.removeAll(toRemove);
         circleCoords.removeAll(toRemove);
 
-
-//        for (Cord drawCord : boundaryCoords) {
-//            if(!(checkCordForPiece(drawCord) instanceof Obstacle))
-//                if(floor.get(drawCord) != null){
-//                    floor.get(drawCord).setColor(0, 1, 0, 1);
-//                }
-//        }
 
         return circleCoords;
     }
