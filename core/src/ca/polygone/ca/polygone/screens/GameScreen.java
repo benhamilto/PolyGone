@@ -58,7 +58,7 @@ public class GameScreen extends PolyGoneScreen {
         mapWidth = 10;
         currentLevel = new Environment(mapLength,mapWidth);
         currentLevel.addPieceToBoard(new HourGlass(new Cord(7, 4)));
-        currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
+//        currentLevel.addPieceToBoard(new HourGlass(new Cord(6, 4)));
         for (int i = 3; i < 7; i++) {
             currentLevel.addPieceToBoard(new Wall(new Cord(5, i)));
         }
@@ -226,6 +226,7 @@ public class GameScreen extends PolyGoneScreen {
             Intersector.intersectRayPlane(pickRay, xzPlane, intersection);
             int x = (int) intersection.x;
             int z = (int) intersection.z;
+
             if (x >= 0 && x < mapLength && z >= 0 && z < mapWidth) {
                 currentLevel.select(x,z);
             }
