@@ -1,6 +1,7 @@
 package ca.polygone;
 import ca.polygone.ca.polygone.screens.GameOverScreen;
 import ca.polygone.ca.polygone.screens.MenuScreen;
+import ca.polygone.ca.polygone.screens.VictoryScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,6 +23,7 @@ public class GraphicUserInterface extends Game {
         this.setScreen(new MenuScreen(this));
     }
 
+
     public void render(){
         super.render();
         if(currentLevel != null) {
@@ -29,9 +31,15 @@ public class GraphicUserInterface extends Game {
                 currentLevel.nonPlayerTurn();
                 currentLevel.resetPlayerPieces();
             }
-            if( currentLevel.checkForDefeat() || currentLevel.checkForVictory()){
+            if( currentLevel.checkForDefeat()) {
                 currentLevel = null;
-                this.setScreen(new MenuScreen(this));
+                this.getScreen().dispose();
+                this.setScreen(new GameOverScreen(this));
+            }
+            else if(currentLevel.checkForVictory()){
+                currentLevel = null;
+                this.getScreen().dispose();
+                this.setScreen(new VictoryScreen(this));
             }
 
         }

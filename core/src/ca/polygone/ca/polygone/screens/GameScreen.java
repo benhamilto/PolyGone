@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -49,6 +50,7 @@ public class GameScreen extends PolyGoneScreen {
     private final Matrix4 floorMatrix = new Matrix4();
 
     private Skin skin;
+    private VerticalGroup turnButtons;
 
 
     public GameScreen(GraphicUserInterface game) {
@@ -160,24 +162,35 @@ public class GameScreen extends PolyGoneScreen {
     public void show() {
         skin = new Skin(Gdx.files.internal("core/assets/uiskin.json"));
 
+        turnButtons = new VerticalGroup();
 
         final TextButton buttonConfirmMove = new TextButton("Confirm Move", skin);
+        final TextButton buttonEndTurn = new TextButton("End turn", skin);
+
+        buttonEndTurn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                //TODO: End turn logic
+            }
+        });
 
         buttonConfirmMove.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 currentLevel.confirmMove();
-//                currentLevel.getVisibleCords();
             }
 
         });
 
+        turnButtons.addActor(buttonConfirmMove);
+        turnButtons.addActor(buttonEndTurn);
+        turnButtons.setWidth(200f);
+        turnButtons.setHeight(40f);
+        turnButtons.setPosition(Gdx.graphics.getWidth() - 200f, 200f);
+        turnButtons.space(3f);
+        turnButtons.columnLeft();
 
-        buttonConfirmMove.setWidth(200f);
-        buttonConfirmMove.setHeight(20f);
-        buttonConfirmMove.setPosition(Gdx.graphics.getWidth() - 200f, 200f);
-
-        stage.addActor(buttonConfirmMove);
+        stage.addActor(turnButtons);
 
     }
 

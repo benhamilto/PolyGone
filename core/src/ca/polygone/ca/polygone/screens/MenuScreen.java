@@ -78,6 +78,7 @@ public class MenuScreen extends PolyGoneScreen {
         buttonGroup.setWidth(200f);
         buttonGroup.columnLeft();
 
+        buttonGroup.space(3f);
         mainTable.addActor(buttonGroup);
 
         stage.addActor(mainTable);
