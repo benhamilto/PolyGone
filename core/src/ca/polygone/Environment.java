@@ -117,6 +117,7 @@ public class Environment {
                 for (Cord drawCord : listOfCords) {
                     floor.get(drawCord).setColor(1, 1, 1, 1);
                 }
+                this.select(selectedPiece.getCords().getX(), selectedPiece.getCords().getY());
             }
         }
 
@@ -128,7 +129,6 @@ public class Environment {
                 Math.abs(selectedCord.getY()-selectedPiece.getCords().getY()));
         selectedPiece.setCords(selectedCord);
         selectedPiece.getSprite().setPosition(selectedCord.getX(), selectedCord.getY());
-        selectedPiece = null;
     }
 
 
@@ -171,10 +171,12 @@ public class Environment {
                 floor.get(key).setColor(1,1,1,1);
             }
         }
-        Sprite sprite = floor.get(selectedCord);
-        sprite.setColor(1, 0, 0, 1);
-        lastSelectedTile = sprite;
-        lastSelectedCord = selectedCord;
+        if(floor.containsKey(selectedCord)) {
+            Sprite sprite = floor.get(selectedCord);
+            sprite.setColor(1, 0, 0, 1);
+            lastSelectedTile = floor.get(selectedCord);
+            lastSelectedCord = selectedCord;
+        }
     }
 
     public HashMap<Cord, Sprite> getDarkMap() {
