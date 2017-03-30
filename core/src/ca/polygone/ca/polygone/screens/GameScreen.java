@@ -168,7 +168,7 @@ public class GameScreen extends PolyGoneScreen {
         buttonEndTurn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                //TODO: End turn logic
+                environment.endMove();
             }
         });
 

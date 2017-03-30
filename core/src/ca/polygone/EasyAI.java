@@ -1,5 +1,7 @@
 package ca.polygone;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 import java.util.HashMap;
 import java.util.Random;
 
@@ -13,7 +15,7 @@ public class EasyAI implements Artificialntelligence {
         Character = newCharacter;
     }
     @Override
-    public Cord chooseMove (HashMap<Cord,Piece> map) {
+    public Cord chooseMove (HashMap<Cord,Piece> map, HashMap<Cord,Sprite> floor) {
 
 
         Random randomno = new Random();
@@ -37,7 +39,7 @@ public class EasyAI implements Artificialntelligence {
                 }else if (! map.get(newCord).preventsMovement()) {
                     return newCord;
                 }
-            } else{
+            } else if(floor.containsKey(newCord)){
                 return newCord;
             }
         }

@@ -11,7 +11,7 @@ public interface Piece {
     boolean preventsMovement();
     Cord getCords();
     void setCords(Cord newCord);
-    
+    void setMoveLeft(int newMoveLeft);
     int getMoveLimit();
     int getMoveLeft();
     void reduceMoveLeft(int valueToReduce);

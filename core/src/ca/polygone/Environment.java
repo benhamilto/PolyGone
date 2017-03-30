@@ -355,7 +355,7 @@ public class Environment {
     public void nonPlayerTurn(){
         for(Piece E : nonPlayerPieces){
             NonPlayerCharacter temp = (NonPlayerCharacter) E ;
-            selectedCord = temp.getAI().chooseMove(Map);
+            selectedCord = temp.getAI().chooseMove(Map,floor);
             if(Map.get(selectedCord) instanceof PlayerCharecter){
                 playerPieces.remove(Map.get(selectedCord));
                 Map.remove(selectedCord);
@@ -399,5 +399,12 @@ public class Environment {
           }
         }
         return true;
+    }
+    public void endMove(){
+        for(Piece E: playerPieces){
+            E.setMoveLeft(0);
+            selectedPiece = E;
+        }
+        select(selectedPiece.getCords().getX(), selectedPiece.getCords().getY());
     }
 }

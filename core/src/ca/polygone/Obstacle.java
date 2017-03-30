@@ -22,9 +22,11 @@ public abstract class Obstacle implements Piece {
     public int getMoveLeft() {
         return 0;
     }
+    public void setMoveLeft(int newMoveLeft){
+
+    }
     public void resetMoveLeft() {
     }
-
     @Override
     public void reduceMoveLeft(int valueToReduce) {
 

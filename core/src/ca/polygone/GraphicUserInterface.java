@@ -3,23 +3,17 @@ import ca.polygone.ca.polygone.screens.GameOverScreen;
 import ca.polygone.ca.polygone.screens.MenuScreen;
 import ca.polygone.ca.polygone.screens.VictoryScreen;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+
 
 public class GraphicUserInterface extends Game {
 
     public SpriteBatch batch;
     public BitmapFont font;
-    Sound gameMusic;
     public Environment environment;
 
-    public GraphicUserInterface(){
-        Sound gameMusic = Gdx.audio.newSound(Gdx.files.internal("core/assets/menusong.wav"));
-        gameMusic.play();
-    }
+
 
     @Override
     public void create() {

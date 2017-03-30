@@ -12,4 +12,5 @@ public class HourGlass  extends PlayerCharecter{
         vision = 3;
 
     }
+
 }

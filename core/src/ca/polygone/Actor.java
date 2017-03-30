@@ -26,6 +26,9 @@ public abstract class Actor implements Piece {
     public void reduceMoveLeft(int valueToReduce) {
         moveLeft = moveLeft - valueToReduce;
     }
+    public void setMoveLeft(int newMoveLeft){
+        moveLeft = newMoveLeft;
+    }
 
     public int getMoveLimit(){
         return moveLimit;
