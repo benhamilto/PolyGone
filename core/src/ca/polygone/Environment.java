@@ -40,9 +40,10 @@ public class Environment {
     }
 
     public void loadLevel(){
-        int mapWidth = currentLevel.getMapWidth();
-        int mapLength = currentLevel.getMapLength();
-        playerPieces = currentLevel.getPlayerPieces();
+        mapWidth = 10;
+        mapLength = 10;
+        playerPieces = (ArrayList<Piece>)currentLevel.getPlayerPieces().clone();
+
         nonPlayerPieces = currentLevel.getNonPlayerPieces();
         victoryCords = currentLevel.getVictoryCords();
 
@@ -51,6 +52,7 @@ public class Environment {
         darkMap = new HashMap<Cord, Sprite>();
 
         Map = currentLevel.getMap();
+
         for (int z = 0; z < mapLength; z++) {
             for (int x = 0; x < mapWidth; x++) {
                 floor.put(new Cord(x, z), new Sprite(badlogictexture));
@@ -128,8 +130,6 @@ public class Environment {
 
 
     public void select(int x, int z) {
-
-
         if (lastSelectedTile != null) {
             if (!listOfCords.contains(lastSelectedCord)) {
                 lastSelectedTile.setColor(1, 1, 1, 1);

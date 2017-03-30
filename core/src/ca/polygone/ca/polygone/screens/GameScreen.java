@@ -51,6 +51,9 @@ public class GameScreen extends PolyGoneScreen {
         super(game);
         this.game = game;
 
+
+        mapLength = 10;
+        mapWidth = 10;
         environment = new Environment();
         game.environment = environment;
 

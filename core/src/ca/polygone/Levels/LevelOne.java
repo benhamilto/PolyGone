@@ -11,6 +11,9 @@ import java.util.HashMap;
 public class LevelOne extends PolyGoneLevel {
 
     public LevelOne() {
+        mapWidth = 10;
+        mapLength = 10;
+
         nextLevel = new LevelTwo();
         isFinalLevel = false;
         victoryCords = new ArrayList<Cord>();
@@ -32,30 +35,30 @@ public class LevelOne extends PolyGoneLevel {
             Map.put(p.getCords(), p);
         }
 
-        Map.put(new Cord(1, 0), new WallHoriz(new Cord(1, 0)));
-        Map.put(new Cord(1, 1), new WallHoriz(new Cord(1, 1)));
-        Map.put(new Cord(1, 2), new WallHoriz(new Cord(1, 2)));
-        Map.put(new Cord(1, 6), new WallHoriz(new Cord(1, 6)));
-        Map.put(new Cord(5, 2), new WallHoriz(new Cord(5, 2)));
-        Map.put(new Cord(6, 6), new WallHoriz(new Cord(6, 6)));
-        Map.put(new Cord(6, 7), new WallHoriz(new Cord(6, 7)));
-        Map.put(new Cord(7, 0), new WallHoriz(new Cord(7, 0)));
-        Map.put(new Cord(7, 1), new WallHoriz(new Cord(7, 1)));
-        Map.put(new Cord(7, 2), new WallHoriz(new Cord(7, 2)));
-        Map.put(new Cord(8, 7), new WallHoriz(new Cord(8, 7)));
+        Map.put(new Cord(1, 0), new WallVert(new Cord(1, 0)));
+        Map.put(new Cord(1, 1), new WallVert(new Cord(1, 1)));
+        Map.put(new Cord(1, 2), new WallVert(new Cord(1, 2)));
+        Map.put(new Cord(1, 6), new WallVert(new Cord(1, 6)));
+        Map.put(new Cord(5, 2), new WallVert(new Cord(5, 2)));
+        Map.put(new Cord(6, 6), new WallVert(new Cord(6, 6)));
+        Map.put(new Cord(6, 7), new WallVert(new Cord(6, 7)));
+        Map.put(new Cord(7, 0), new WallVert(new Cord(7, 0)));
+        Map.put(new Cord(7, 1), new WallVert(new Cord(7, 1)));
+        Map.put(new Cord(7, 2), new WallVert(new Cord(7, 2)));
+        Map.put(new Cord(8, 7), new WallVert(new Cord(8, 7)));
 
-        Map.put(new Cord(2, 3), new WallVert(new Cord(2, 3)));
-        Map.put(new Cord(3, 3), new WallVert(new Cord(3, 3)));
-        Map.put(new Cord(4, 3), new WallVert(new Cord(4, 3)));
-        Map.put(new Cord(2, 5), new WallVert(new Cord(2, 5)));
-        Map.put(new Cord(3, 5), new WallVert(new Cord(3, 5)));
-        Map.put(new Cord(4, 5), new WallVert(new Cord(4, 5)));
-        Map.put(new Cord(2, 7), new WallVert(new Cord(2, 7)));
-        Map.put(new Cord(3, 7), new WallVert(new Cord(3, 7)));
-        Map.put(new Cord(5, 8), new WallVert(new Cord(5, 8)));
-        Map.put(new Cord(7, 8), new WallVert(new Cord(7, 8)));
-        Map.put(new Cord(7, 5), new WallVert(new Cord(7, 5)));
-
+        Map.put(new Cord(2, 3), new WallHoriz(new Cord(2, 3)));
+        Map.put(new Cord(3, 3), new WallHoriz(new Cord(3, 3)));
+        Map.put(new Cord(4, 3), new WallHoriz(new Cord(4, 3)));
+        Map.put(new Cord(2, 5), new WallHoriz(new Cord(2, 5)));
+        Map.put(new Cord(3, 5), new WallHoriz(new Cord(3, 5)));
+        Map.put(new Cord(4, 5), new WallHoriz(new Cord(4, 5)));
+        Map.put(new Cord(2, 7), new WallHoriz(new Cord(2, 7)));
+        Map.put(new Cord(3, 7), new WallHoriz(new Cord(3, 7)));
+        Map.put(new Cord(5, 8), new WallHoriz(new Cord(5, 8)));
+        Map.put(new Cord(7, 8), new WallHoriz(new Cord(7, 8)));
+        Map.put(new Cord(7, 5), new WallHoriz(new Cord(7, 5)));
+        
 
         victoryCords.add(new Cord(9, 0));
         victoryCords.add(new Cord(8, 0));
@@ -65,8 +68,6 @@ public class LevelOne extends PolyGoneLevel {
 
     }
 
-    public ArrayList<Piece> getplayerPieces(){
-        return playerPieces;
-    }
+
 
 }

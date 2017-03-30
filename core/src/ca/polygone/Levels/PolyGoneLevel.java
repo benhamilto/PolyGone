@@ -17,7 +17,7 @@ public abstract class PolyGoneLevel {
     protected ArrayList<Piece> playerPieces = new ArrayList<Piece>();
     protected ArrayList<Piece> nonPlayerPieces = new ArrayList<Piece>();
     protected boolean isFinalLevel;
-    private int mapWidth = 10, mapLength = 10;
+    protected int mapWidth, mapLength;
 
     public HashMap<Cord, Piece> getMap() {
         return Map;
@@ -34,7 +34,6 @@ public abstract class PolyGoneLevel {
     public PolyGoneLevel getNextLevel() {
         return nextLevel;
     }
-
 
     public int getMapWidth() {
         return mapWidth;
