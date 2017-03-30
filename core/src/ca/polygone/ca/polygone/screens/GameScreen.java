@@ -69,6 +69,10 @@ public class GameScreen extends PolyGoneScreen {
         for (int i = 3; i < 7; i++) {
             currentLevel.addPieceToBoard(new Wall(new Cord(5, i)));
         }
+        currentLevel.addPieceToBoard(new SWWallCorner(new Cord(5,2)));
+        currentLevel.addPieceToBoard(new SEWallCorner(new Cord(5,7)));
+        currentLevel.addPieceToBoard(new NWWallCorner(new Cord(6,7)));
+        currentLevel.addPieceToBoard(new NEWallCorner(new Cord(6,2)));
         stage = new Stage();
 
 
