@@ -1,6 +1,7 @@
 package ca.polygone;
 import ca.polygone.ca.polygone.screens.GameOverScreen;
 import ca.polygone.ca.polygone.screens.MenuScreen;
+import ca.polygone.ca.polygone.screens.VictoryScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,11 +13,11 @@ public class GraphicUserInterface extends Game {
 
     public SpriteBatch batch;
     public BitmapFont font;
-    public Environment currentLevel;
     Sound gameMusic;
+    public Environment environment;
 
     public GraphicUserInterface(){
-        Sound gameMusic = Gdx.audio.newSound(Gdx.files.internal());
+        Sound gameMusic = Gdx.audio.newSound(Gdx.files.internal("core/assets/menusong.wav"));
         gameMusic.play();
     }
 
@@ -27,16 +28,23 @@ public class GraphicUserInterface extends Game {
         this.setScreen(new MenuScreen(this));
     }
 
+
     public void render(){
         super.render();
-        if(currentLevel != null) {
-            if (currentLevel.isPlayerTurnDone()) {
-                currentLevel.nonPlayerTurn();
-                currentLevel.resetPlayerPieces();
+        if(environment != null) {
+            if (environment.isPlayerTurnDone()) {
+                environment.nonPlayerTurn();
+                environment.resetPlayerPieces();
             }
-            if( currentLevel.checkForDefeat() || currentLevel.checkForVictory()){
-                currentLevel = null;
-                this.setScreen(new MenuScreen(this));
+            if( environment.checkForDefeat()) {
+                environment = null;
+                this.getScreen().dispose();
+                this.setScreen(new GameOverScreen(this));
+            }
+            else if(environment.checkForVictory()){
+                environment = null;
+                this.getScreen().dispose();
+                this.setScreen(new VictoryScreen(this));
             }
 
         }

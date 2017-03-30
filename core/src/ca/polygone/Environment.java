@@ -1,5 +1,7 @@
 package ca.polygone;
 
+import ca.polygone.Levels.LevelOne;
+import ca.polygone.Levels.PolyGoneLevel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -30,21 +32,27 @@ public class Environment {
     private ArrayList<Cord> victoryCords = new ArrayList<Cord>();
     private Cord lastSelectedCord;
     private Texture badlogictexture;
+    private PolyGoneLevel currentLevel;
 
-    public Environment(int newLength, int newWidth) {
-        mapLength = newLength;
-        mapWidth = newWidth;
-        for (int z = 1; z < 3; z++) {
-            for (int x = 1; x < 3; x++) {
-                victoryCords.add(new Cord(x,z));
-            }
-        }
-        victoryCords.add(new Cord(1,1));
+    public Environment() {
+        currentLevel = new LevelOne();
+        loadLevel();
+    }
+
+    public void loadLevel(){
+        mapWidth = 10;
+        mapLength = 10;
+        playerPieces = (ArrayList<Piece>)currentLevel.getPlayerPieces().clone();
+
+        nonPlayerPieces = currentLevel.getNonPlayerPieces();
+        victoryCords = currentLevel.getVictoryCords();
+
         badlogictexture = new Texture(Gdx.files.internal("core/assets/GroundGrey.png"));
         floor = new HashMap<Cord, Sprite>();
         darkMap = new HashMap<Cord, Sprite>();
 
-        Map = new HashMap<Cord, Piece>();
+        Map = currentLevel.getMap();
+
         for (int z = 0; z < mapLength; z++) {
             for (int x = 0; x < mapWidth; x++) {
                 floor.put(new Cord(x, z), new Sprite(badlogictexture));
@@ -71,8 +79,6 @@ public class Environment {
 
             }
         }
-
-
     }
 
     public HashMap<Cord, Sprite> getFloor() {
@@ -86,16 +92,7 @@ public class Environment {
 
     public ArrayList<Cord> getVictory(){return victoryCords;}
 
-    public void addPieceToBoard(Piece newPiece){
-        Map.put(newPiece.getCords(),newPiece);
-        if(newPiece instanceof PlayerCharecter){
-            playerPieces.add(newPiece);
-        }
-        if (newPiece instanceof NonPlayerCharacter) {
-            nonPlayerPieces.add(newPiece);
-        }
 
-    }
 
     public void movePiece(Piece pieceToMove, Cord newCords) {
 
@@ -133,8 +130,6 @@ public class Environment {
 
 
     public void select(int x, int z) {
-
-
         if (lastSelectedTile != null) {
             if (!listOfCords.contains(lastSelectedCord)) {
                 lastSelectedTile.setColor(1, 1, 1, 1);
