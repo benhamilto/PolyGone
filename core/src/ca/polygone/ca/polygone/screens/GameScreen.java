@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -51,6 +52,8 @@ public class GameScreen extends PolyGoneScreen {
         super(game);
         this.game = game;
 
+        Sound sound = Gdx.audio.newSound(Gdx.files.internal("core/assets/menusong.wav"));
+        sound.loop();
 
         mapLength = 10;
         mapWidth = 10;
